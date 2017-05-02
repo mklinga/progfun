@@ -2,12 +2,7 @@ package recfun
 
 object Main {
   def main(args: Array[String]) {
-    println("Pascal's Triangle")
-    for (row <- 0 to 10) {
-      for (col <- 0 to row)
-        print(pascal(col, row) + " ")
-      println()
-    }
+    countChange(4, List[Int](1, 2))
   }
 
   /**
@@ -46,5 +41,34 @@ object Main {
   /**
    * Exercise 3
    */
-    def countChange(money: Int, coins: List[Int]): Int = ???
+    def countChange(money: Int, coins: List[Int]): Int = {
+
+      var matches: Int = 0
+      if (money == 0 || coins.isEmpty) return 0
+
+      def addNext(sum: Int, next: Int): Int = {
+        sum + next
+      }
+
+      def addRest(sum: Int, rest: List[Int]): Unit = {
+        if (rest.isEmpty) {
+          return;
+        }
+        
+        addUntilOver(sum, rest.head, rest.tail)
+      }
+
+      def addUntilOver(sum: Int, current: Int, rest: List[Int]): Unit = {
+        if (sum < money) {
+          addRest(sum, rest)
+          return addUntilOver(addNext(sum, current), current, rest)
+        }
+        else if (sum == money) {
+          matches += 1
+        }
+      }
+
+      addUntilOver(0, coins.head, coins.tail)
+      matches
+    }
   }
