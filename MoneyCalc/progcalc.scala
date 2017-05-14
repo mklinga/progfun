@@ -14,8 +14,8 @@ object Progcalc extends App {
       addMonthlyInterest(money + savingsPerMonth)
     )
 
-  def howLongToReachInterestRate (desiredPerMonth: Double, savingsPerMonth: Double, money: Double, months: Int = 0): Int = {
-    val interest = (money * interestPercentagePerMonth / 100)
+  def howLongToReachInterestRate (desiredPerMonth: Double, savingsPerMonth: Double, money: Double, months: Int = 0): Double = {
+    val interest: Double = (money * interestPercentagePerMonth / 100)
     if (interest > desiredPerMonth) months
     else howLongToReachInterestRate(
       desiredPerMonth,
@@ -25,9 +25,9 @@ object Progcalc extends App {
     )
   }
 
-  val oneYearSavings = calculate(12, 500, 0)
-  val fiveYearSavings = calculate(60, 500, 0)
-  val tenYearSavings = calculate(120, 500, 0)
+  val oneYearSavings = calculate(12, 600, 0)
+  val fiveYearSavings = calculate(60, 600, 0)
+  val tenYearSavings = calculate(120, 600, 0)
 
   println()
   println("After one year = " + oneYearSavings)
@@ -43,8 +43,19 @@ object Progcalc extends App {
   println("Yearly interest net = " + tenYearSavings * interestPercentagePerYear / 100)
 
   println()
-  val toReach1000 = howLongToReachInterestRate(1000, 500, 0, 0) / 12
-  val toReach2000 = howLongToReachInterestRate(2000, 500, 0, 0) / 12
-  println("To reach salary of 1000 euros per month on the interests => " + toReach1000 + " years")
-  println("To reach salary of 2000 euros per month on the interests => " + toReach2000 + " years")
+  val toReach500: Double = howLongToReachInterestRate(500, 600, 0, 0)
+  val toReach1000: Double = howLongToReachInterestRate(1000, 600, 0, 0)
+
+  def prettyPrint(target: Int, toReach: Double) = {
+    val years: Int = Math.floor(toReach / 12).toInt
+    val monthsExtra: Int = Math.round(toReach % 12).toInt
+    println("To reach salary of " + target + " euros per month on the interests => " +
+      years + " years, " + monthsExtra + " month(s)")
+
+    println("In that time, you'd have paid " + toReach * 600 + " euros on rent")
+  }
+
+  prettyPrint(500, toReach500)
+  prettyPrint(1000, toReach1000)
+
 }
